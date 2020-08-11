@@ -3,13 +3,13 @@ from typing import List
 import spacy
 from spacy.pipeline import Sentencizer
 
+from documental import Text, Tokens
 from omnilingual import LanguageCode, PartOfSpeech
-from .document import Text, TokenizedDocument
-from .mul.numbers import combine_numbers
-from .mul.punctuation import convert_punctuation_tokens
 
+from ..mul.numbers import combine_numbers
+from ..mul.punctuation import convert_punctuation_tokens
 from ..parser import PipelineAnnotator
-from ..tokens import WordToken
+from documental.token import WordToken
 
 
 class EnglishParser(PipelineAnnotator):
@@ -26,7 +26,7 @@ class EnglishParser(PipelineAnnotator):
     def supported_languages(self) -> List[LanguageCode]:
         return [LanguageCode.English]
 
-    def tokenize(self, text: Text, tokenized: TokenizedDocument) -> None:
+    def tokenize(self, text: Text, tokenized: Tokens) -> None:
         for token in self.nlp(text.text):
             # TODO: POS checking.
             tokenized.tokens.append(

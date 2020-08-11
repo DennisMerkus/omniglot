@@ -1,9 +1,9 @@
 import unittest
+
 import pytest
-
-from entwine.dictionary.mamaka import parse_entry, MamakaEntry, HawaiianPOS
-
 from bs4 import BeautifulSoup
+
+from omniglot.haw.mamaka import HawaiianPOS, MamakaEntry, parse_entry
 
 
 class TestMamaka(unittest.TestCase):

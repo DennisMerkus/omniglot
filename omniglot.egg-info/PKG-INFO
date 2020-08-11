@@ -1,0 +1,14 @@
+Metadata-Version: 1.2
+Name: omniglot
+Version: 0.2.0
+Summary: Language processing and annotation for language learning in multiple languages
+Home-page: https://github.com/DennisMerkus/omniglot
+Author: Dennis Merkus
+License: UNKNOWN
+Description: # omniglot
+        Natural language processing and annotation for language learning in multiple languages
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Scientific/Engineering
+Requires-Python: >=3.8

@@ -3,7 +3,7 @@ from typing import List
 
 from pydantic import BaseModel
 
-from entwine.dictionary.orth import Orthography
+from omniglot.dictionary import Orthography
 
 
 class ChineseOrthography(Orthography):

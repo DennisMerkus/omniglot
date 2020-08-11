@@ -1,6 +1,6 @@
 from typing import List
 
-from .tokens import NumberToken, Token
+from documental.token import NumberToken, Token
 
 
 def is_number(text: str) -> bool:

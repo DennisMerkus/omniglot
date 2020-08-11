@@ -4,23 +4,20 @@ from typing import List, Optional, Union
 
 import spacy
 
-from omnilingual import LanguageCode, PartOfSpeech
-from .document import Text, TokenizedDocument
-from omniglot.mul.numbers import combine_numbers
-from omniglot.mul.punctuation import (
-    punctuation_sticks_left,
-    punctuation_sticks_right,
-)
-
-from ..morpheme import Morpheme
-from ..parser import PipelineAnnotator
-from ..tokens import (
+from documental import Text, Tokens
+from documental.token import (
     LetterToken,
     NumberToken,
     PunctuationToken,
     Token,
     WordToken,
 )
+from omniglot.mul.numbers import combine_numbers
+from omniglot.mul.punctuation import punctuation_sticks_left, punctuation_sticks_right
+from omnilingual import LanguageCode, PartOfSpeech
+
+from ..morpheme import Morpheme
+from ..parser import PipelineAnnotator
 
 # https://en.wikipedia.org/wiki/Japanese_grammar#Stem_forms
 
@@ -168,7 +165,7 @@ class JapaneseParser(PipelineAnnotator):
     def supported_languages(self) -> List[LanguageCode]:
         return [LanguageCode.Japanese]
 
-    def spacy_tokenize(self, text: Text, tokenized: TokenizedDocument) -> None:
+    def spacy_tokenize(self, text: Text, tokenized: Tokens) -> None:
         for token in self.nlp(text.text):
             pos: PartOfSpeech
 
@@ -246,7 +243,7 @@ class JapaneseParser(PipelineAnnotator):
                     )
                 )
 
-    def clean_mecab_data(self, text: Text, tokenized: TokenizedDocument) -> None:
+    def clean_mecab_data(self, text: Text, tokenized: Tokens) -> None:
         for token in tokenized.tokens:
             if isinstance(token, WordToken):
                 katakana = self._try_if_lemma_is_katakanago(token.lemma)
@@ -259,7 +256,7 @@ class JapaneseParser(PipelineAnnotator):
                 if lemma:
                     token.lemma = lemma
 
-    def _combine_letters(self, text: Text, tokenized: TokenizedDocument) -> None:
+    def _combine_letters(self, text: Text, tokenized: Tokens) -> None:
         combined_tokens: List[Token] = []
 
         combined_letters: Optional[str] = None
@@ -312,7 +309,7 @@ class JapaneseParser(PipelineAnnotator):
 
         tokenized.tokens = combined_tokens
 
-    def _combine_verbs(self, text: Text, tokenized: TokenizedDocument) -> None:
+    def _combine_verbs(self, text: Text, tokenized: Tokens) -> None:
         if len(tokenized.tokens) == 0:
             return
 

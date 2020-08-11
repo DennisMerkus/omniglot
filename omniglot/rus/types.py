@@ -2,7 +2,7 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-from entwine.dictionary.orth import Orthography
+from omniglot.dictionary import Orthography
 
 
 class RussianOrthography(Orthography):

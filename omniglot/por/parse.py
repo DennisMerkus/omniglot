@@ -3,16 +3,14 @@ from typing import List
 import spacy
 from spacy.pipeline import Sentencizer
 
+from documental import Text, Tokens
+from documental.token import WordToken
+from omniglot.mul.numbers import combine_numbers
+from omniglot.mul.punctuation import convert_punctuation_tokens
 from omnilingual import LanguageCode, PartOfSpeech
 from omnilingual.features import parse_features
 
-from documental.text import Text, TokenizedDocument
-
-from omniglot.mul.numbers import combine_numbers
-from omniglot.mul.punctuation import convert_punctuation_tokens
-
 from ..parser import PipelineAnnotator
-from ..tokens import WordToken
 
 
 class PortugueseParser(PipelineAnnotator):
@@ -29,7 +27,7 @@ class PortugueseParser(PipelineAnnotator):
     def supported_languages(self) -> List[LanguageCode]:
         return [LanguageCode.Portuguese]
 
-    def tokenize(self, text: Text, tokenized: TokenizedDocument) -> None:
+    def tokenize(self, text: Text, tokenized: Tokens) -> None:
         for token in self.nlp(text.text):
             tokenized.tokens.append(
                 WordToken(

@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "omniglot"
+version = "0.2.0"
+description = "Language processing and annotation for language learning in multiple languages"
+authors = ["Dennis Merkus <dennis.merkus@pm.me>"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/DennisMerkus/omniglot.git"
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering"
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+spacy = "^2.3.2"
+documental = {git = "https://github.com/DennisMerkus/documental.git"}
+omnilingual = {git = "https://github.com/DennisMerkus/pyomnilingual.git"}
+aiofiles = "^0.5.0"
+pycld2 = "^0.41"
+pydantic = "^1.6.1"
+en-core-web-sm = {url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.3.1/en_core_web_sm-2.3.1.tar.gz"}
+de-core-news-md = {url = "https://github.com/explosion/spacy-models/releases/download/de_core_news_md-2.3.0/de_core_news_md-2.3.0.tar.gz"}
+fr-core-news-md = {url = "https://github.com/explosion/spacy-models/releases/download/fr_core_news_md-2.3.0/fr_core_news_md-2.3.0.tar.gz"}
+ja-core-news-md = {url = "https://github.com/explosion/spacy-models/releases/download/ja_core_news_md-2.3.1/ja_core_news_md-2.3.1.tar.gz"}
+pymorphy2 = "^0.8"
+pymorphy2-dicts-ru = "^2.4.404381"
+lxml = "^4.5.2"
+beautifulsoup4 = "^4.9.1"
+num2words = "^0.5.10"
+pt-core-news-sm = {url = "https://github.com/explosion/spacy-models/releases/download/pt_core_news_sm-2.3.0/pt_core_news_sm-2.3.0.tar.gz"}
+
+[tool.poetry.dev-dependencies]
+black = "^19.10b0"
+flake8 = "^3.8.3"
+mypy = "^0.782"
+pytest = "^6.0.1"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

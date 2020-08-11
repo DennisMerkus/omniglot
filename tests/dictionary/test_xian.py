@@ -5,9 +5,7 @@ from omnilingual import PartOfSpeech
 from omnilingual.features.uxy import XianMood
 
 from bs4 import BeautifulSoup
-from entwine.dictionary.xian import XianDictionaryEntry
-from entwine.dictionary.xian import entries as get_entries
-from entwine.dictionary.xian import parse_entry
+from omniglot.uxy.dictionary import XianDictionaryEntry, parse_entries, parse_entry
 
 from .test_xian_dictionary import dictionary
 
@@ -15,7 +13,7 @@ from .test_xian_dictionary import dictionary
 class TestXianDictionary(unittest.TestCase):
     @pytest.mark.asyncio
     async def test_it_finds_the_dictionary_start(self):
-        entries = get_entries(BeautifulSoup(dictionary, "lxml"))
+        entries = parse_entries(BeautifulSoup(dictionary, "lxml"))
 
         start = next(entries)
 

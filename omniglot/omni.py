@@ -4,11 +4,14 @@ from collections import defaultdict
 from typing import Dict, List, Optional, Tuple
 
 import pycld2
+
+from documental import Text, Tokens
+from documental.document import Document, ParentDocument
+from documental.token import PunctuationToken, SpaceToken, WordToken
 from omnilingual import Language, LanguageCode
 
 from .ara.parse import ArabicParser
 from .deu.parse import GermanParser
-from .document import Document, ParentDocument, Text, TokenizedDocument
 from .eng.parse import EnglishParser
 from .fra.parse import FrenchParser
 from .jpn.parse import JapaneseParser
@@ -17,7 +20,6 @@ from .lookup import LemmaNotFoundError, LexemeLookup
 from .parser import Annotator
 from .por.parse import PortugueseParser
 from .rus.parse import RussianParser
-from .tokens import PunctuationToken, SpaceToken, WordToken
 from .zho.parse import MandarinParser
 
 
@@ -64,7 +66,7 @@ class OmnilingualProcessor(NaturalLanguageProcessor):
         elif isinstance(document, Text):
             logging.debug("Tokenizing Document %s" % (document.text))
 
-            tokenized = TokenizedDocument(document.text)
+            tokenized = Tokens(document.text)
 
             if document.language is LanguageCode.Undetermined:
                 logging.warning("[Omni] Undetermined languages. Skipping tokenization.")
@@ -86,7 +88,7 @@ class OmnilingualProcessor(NaturalLanguageProcessor):
 
     async def lookup_senses(self, lookup: LexemeLookup, document: Document) -> None:
         for element in document:
-            if not isinstance(element, TokenizedDocument):
+            if not isinstance(element, Tokens):
                 continue
 
             for token in element.tokens:
@@ -219,7 +221,7 @@ class OmnilingualProcessor(NaturalLanguageProcessor):
 
     def add_spaces(self, document: Document):
         for element in document:
-            if not isinstance(element, TokenizedDocument):
+            if not isinstance(element, Tokens):
                 continue
 
             if element.language in [

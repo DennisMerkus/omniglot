@@ -4,36 +4,13 @@ from typing import Any, Dict, List, Optional, Set
 
 from omnilingual import LanguageCode
 
+from .sense import Sense
+
 
 class LexemeIdentifier(BaseModel):
-    language: str
+    language: LanguageCode
     lemma: str
     pos: str
-
-
-class SourceWord(BaseModel):
-    language: LanguageCode
-
-    word: Optional[str]
-
-    full: bool
-
-    tags: Set[str] = set()
-
-
-class Sense(BaseModel):
-    definitions: Dict[str, List[str]]
-
-    tags: Set[str] = set()
-
-    information: List[str] = []
-
-    references: List[str] = []
-
-    antonyms: List[str] = []
-    synonyms: List[str] = []
-
-    source_language_words: List[SourceWord] = []
 
 
 class Lexeme(LexemeIdentifier):

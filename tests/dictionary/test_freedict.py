@@ -3,7 +3,7 @@ import unittest
 import pytest
 from bs4 import BeautifulSoup
 
-from entwine.dictionary.freedict import FreedictEntry, parse_freedict_entry
+from omniglot.mul.freedict import FreedictEntry, parse_freedict_entry
 
 
 class TestFreedict(unittest.TestCase):
@@ -64,10 +64,7 @@ class TestFreedict(unittest.TestCase):
             parsed_entry,
             FreedictEntry(
                 orthography=["mostrar-se"],
-                senses=[
-                    ["point out to be"],
-                    ["appear", "appear to be", "seem"],
-                ],
+                senses=[["point out to be"], ["appear", "appear to be", "seem"],],
             ),
         )
 

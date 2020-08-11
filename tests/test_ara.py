@@ -1,10 +1,9 @@
 import unittest
 
-from omnilingual import LanguageCode
-
+from documental import Text
+from documental.token import PunctuationToken, WordToken
 from omniglot.ara.parse import ArabicParser
-from omniglot.document import Text
-from omniglot.tokens import WordToken, PunctuationToken
+from omnilingual import LanguageCode
 
 
 class TestArabic(unittest.TestCase):

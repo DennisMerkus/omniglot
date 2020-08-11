@@ -4,9 +4,12 @@ import pymorphy2
 from pymorphy2.tagset import OpencorporaTag
 from spacy.lang.ru import Russian as SpacyRussian
 
-from omnilingual import LanguageCode, PartOfSpeech
 from documental import Text, Tokens
-
+from documental.token import WordToken
+from omniglot.mul.numbers import combine_numbers
+from omniglot.mul.punctuation import convert_punctuation_tokens
+from omniglot.mul.whitespace import remove_extra_whitespace
+from omnilingual import LanguageCode, PartOfSpeech
 from omnilingual.features import (
     Animacy,
     Aspect,
@@ -19,12 +22,8 @@ from omnilingual.features import (
     Tense,
     Voice,
 )
-from omniglot.mul.numbers import combine_numbers
-from omniglot.mul.punctuation import convert_punctuation_tokens
-from omniglot.mul import remove_extra_whitespace
 
 from ..parser import PipelineAnnotator
-from ..tokens import WordToken
 
 
 class RussianParser(PipelineAnnotator):

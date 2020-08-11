@@ -1,10 +1,10 @@
 import unittest
 
 import pytest
+
+from omniglot.zbn.dictionary import BanuDictionaryEntry, parse_entry
 from omnilingual import PartOfSpeech
 from omnilingual.features.zbn import BanuNounClass, BanuVerbType
-
-from entwine.dictionary.banu import BanuDictionaryEntry, parse_entry
 
 
 class TestBanuDictionary(unittest.TestCase):

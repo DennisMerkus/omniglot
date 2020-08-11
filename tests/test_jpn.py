@@ -15,7 +15,7 @@ class TestJapanese(unittest.TestCase):
         tokenized = self.parser.process(Text("2020年4月11日", LanguageCode.Japanese))
 
         expected_tokens = [
-            NumberToken("2020"),
+            NumberToken("2020", 2020, "に　せん　に　じゅう"),
             WordToken("年", LanguageCode.Japanese, pos=PartOfSpeech.Noun),
             NumberToken("4"),
             WordToken("月", LanguageCode.Japanese, pos=PartOfSpeech.Noun),

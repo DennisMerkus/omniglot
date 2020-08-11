@@ -1,6 +1,6 @@
 import unittest
 
-from entwine.nlp.language import Language, LanguageCode
+from omnilingual import Language, LanguageCode
 
 from pycld2 import LANGUAGES as pycld2_languages
 
@@ -19,9 +19,7 @@ class TestLanguage(unittest.TestCase):
         self.assertEqual(Language.where(iso_1=iso_1), iso_3)
         self.assertEqual(Language.where(iso_3=iso_3), iso_1)
 
-        self.assertEqual(
-            Language.where(iso_1=iso_1), Language.where(iso_3=iso_3)
-        )
+        self.assertEqual(Language.where(iso_1=iso_1), Language.where(iso_3=iso_3))
 
     def test_supports_all_pycld2_languages(self):
         for name, code in pycld2_languages:

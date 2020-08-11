@@ -1,9 +1,9 @@
 import unittest
+
 import pytest
 
-from entwine.dictionary.jmdict.convert import create_JMDict_database_entries
-from entwine.dictionary.jmdict.extract import convert_to_JSON
-
+from omniglot.jpn.jmdict.convert import create_JMDict_database_entries
+from omniglot.jpn.jmdict.extract import convert_to_JSON
 from omnilingual import PartOfSpeech
 
 from .test_jmdict_entries import entry_America, entry_batsuichi

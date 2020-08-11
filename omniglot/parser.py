@@ -1,15 +1,15 @@
 from typing import Callable, List
 
+from documental import Text, Tokens
 from omnilingual import LanguageCode
 
-from ..nlp.errors import UnsupportedLanguageError
-from .document import Text, TokenizedDocument
+from .errors import UnsupportedLanguageError
 
-Pipe = Callable[[Text, TokenizedDocument], None]
+Pipe = Callable[[Text, Tokens], None]
 
 
 class Annotator(object):
-    def process(self, document: Text) -> TokenizedDocument:
+    def process(self, document: Text) -> Tokens:
         pass
 
 
@@ -23,13 +23,13 @@ class PipelineAnnotator(Annotator):
     def add_pipe(self, pipe: Pipe) -> None:
         self.pipeline.append(pipe)
 
-    def process(self, document: Text) -> TokenizedDocument:
+    def process(self, document: Text) -> Tokens:
         if document.language not in self.supported_languages():
             raise UnsupportedLanguageError(
                 "%s is not supported by this parser" % (document.language)
             )
 
-        tokenized: TokenizedDocument = TokenizedDocument(document.text)
+        tokenized = Tokens(document.text)
 
         for pipe in self.pipeline:
             pipe(document, tokenized)

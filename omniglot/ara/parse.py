@@ -1,18 +1,16 @@
 import logging
-
 from typing import List
 
 from spacy.lang.ar import Arabic as SpacyArabic
 from spacy.pipeline import Sentencizer
 
-from omnilingual import LanguageCode, PartOfSpeech
-
-from omniglot.document import Text, TokenizedDocument
+from documental import Text, Tokens
+from documental.token import WordToken
 from omniglot.mul.numbers import combine_numbers
 from omniglot.mul.punctuation import convert_punctuation_tokens
+from omnilingual import LanguageCode, PartOfSpeech
 
 from ..parser import PipelineAnnotator
-from ..tokens import WordToken
 
 
 class ArabicParser(PipelineAnnotator):
@@ -30,7 +28,7 @@ class ArabicParser(PipelineAnnotator):
     def supported_languages(self) -> List[LanguageCode]:
         return [LanguageCode.Arabic]
 
-    def tokenize(self, text: Text, tokenized: TokenizedDocument) -> None:
+    def tokenize(self, text: Text, tokenized: Tokens) -> None:
         for token in self.nlp(text.text):
             logging.debug(
                 "%s %s %s %s" % (token.text, token.lemma_, token.pos_, token.tag_)

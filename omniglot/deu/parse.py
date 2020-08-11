@@ -1,15 +1,15 @@
 from typing import List
 
-from omnilingual import LanguageCode, PartOfSpeech
-
 import spacy
 from spacy.pipeline import Sentencizer
 
+from documental import Text, Tokens
+from documental.token import WordToken
+from omniglot.mul.numbers import combine_numbers
+from omniglot.mul.punctuation import convert_punctuation_tokens
+from omnilingual import LanguageCode, PartOfSpeech
+
 from ..parser import PipelineAnnotator
-from ..tokens import WordToken
-from .document import Text, TokenizedDocument
-from .mul.numbers import combine_numbers
-from .mul.punctuation import convert_punctuation_tokens
 
 
 class GermanParser(PipelineAnnotator):
@@ -27,7 +27,7 @@ class GermanParser(PipelineAnnotator):
     def supported_languages(self) -> List[LanguageCode]:
         return [LanguageCode.German]
 
-    def tokenize(self, text: Text, tokenized: TokenizedDocument):
+    def tokenize(self, text: Text, tokenized: Tokens):
         for token in self.nlp(text.text):
             # TODO: Check POS
             print(token.text, token.pos_, token.lemma_)

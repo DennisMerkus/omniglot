@@ -3,14 +3,13 @@ from typing import List
 from spacy.lang.zh import Chinese as SpacyChinese
 from spacy.pipeline import Sentencizer
 
-from omnilingual import LanguageCode, PartOfSpeech
-
 from documental import Text, Tokens
+from documental.token import WordToken
 from omniglot.mul.numbers import combine_numbers
 from omniglot.mul.punctuation import convert_punctuation_tokens
+from omnilingual import LanguageCode, PartOfSpeech
 
 from ..parser import PipelineAnnotator
-from ..tokens import WordToken
 
 
 class MandarinParser(PipelineAnnotator):

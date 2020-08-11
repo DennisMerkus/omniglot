@@ -4,3 +4,7 @@ class NLPError(Exception):
 
 class UnsupportedLanguageError(NLPError):
     pass
+
+
+class TagNotRecognizedError(ValueError):
+    pass

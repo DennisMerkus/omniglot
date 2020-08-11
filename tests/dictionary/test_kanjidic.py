@@ -3,8 +3,8 @@ import unittest
 import pytest
 from bs4 import BeautifulSoup
 
-from entwine.database.kanji import Kanji
-from entwine.dictionary.kanjidic.extract import convert_entry
+from omniglot.jpn.types import Kanji
+from omniglot.jpn.kanjidic.extract import convert_entry
 
 from .test_kanjidic_entries import entry_意, entry_衣
 

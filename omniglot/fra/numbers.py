@@ -6,7 +6,7 @@ from num2words import num2words
 from omnilingual import LanguageCode, PartOfSpeech
 from omnilingual.features import NumType
 from ..numbers import NumberConverter, is_number
-from ..tokens import (
+from documental.token import (
     Token,
     NumberToken,
     WordToken,

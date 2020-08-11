@@ -1,15 +1,15 @@
 from typing import List
 
-from omnilingual import LanguageCode, PartOfSpeech
-from omnilingual.features import Features, Tense, VerbForm, parse_features
-
 import spacy
-from omniglot.document import Text, TokenizedDocument
+from spacy.pipeline import Sentencizer
+
+from documental import Text, Tokens
+from documental.token import Ellision, Token, WordToken
 from omniglot.mul.numbers import combine_numbers
 from omniglot.mul.punctuation import convert_punctuation_tokens
 from omniglot.parser import PipelineAnnotator
-from omniglot.tokens import Ellision, Token, WordToken
-from spacy.pipeline import Sentencizer
+from omnilingual import LanguageCode, PartOfSpeech
+from omnilingual.features import Features, Tense, VerbForm, parse_features
 
 from .numbers import FrenchNumberConverter
 
@@ -29,7 +29,7 @@ class FrenchParser(PipelineAnnotator):
     def supported_languages(self) -> List[LanguageCode]:
         return [LanguageCode.French]
 
-    def tokenize(self, text: Text, tokenized: TokenizedDocument) -> None:
+    def tokenize(self, text: Text, tokenized: Tokens) -> None:
         tokens: List[Token] = []
 
         for token in self.nlp(text.text):

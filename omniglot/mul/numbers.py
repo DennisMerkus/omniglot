@@ -1,10 +1,10 @@
 from typing import List, Optional
 
-from omniglot.document import Text, TokenizedDocument
-from omniglot.tokens import NumberToken, Token
+from documental import Text, Tokens
+from documental.token import Token, NumberToken
 
 
-def combine_numbers(text: Text, tokenized: TokenizedDocument) -> None:
+def combine_numbers(text: Text, tokenized: Tokens) -> None:
     combined_tokens: List[Token] = []
 
     combined_number: Optional[str] = None
