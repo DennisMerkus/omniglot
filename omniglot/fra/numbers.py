@@ -34,7 +34,7 @@ class FrenchNumberConverter(NumberConverter):
             return WordToken(text, LanguageCode.French, pos=PartOfSpeech.Number)
 
     @staticmethod
-    def convert_number(number: int) -> List[Token]:
+    def verbalize_number(number: int) -> List[Token]:
         text: str = num2words(number, lang="fr")
 
         pronunciation: List[Token] = []

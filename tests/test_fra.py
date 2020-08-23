@@ -1,7 +1,8 @@
 import unittest
 
-from documental import Text
 from documental.token import Ellision, PunctuationToken, WordToken
+from omniglot.fra.numbers import FrenchNumberConverter
+from omniglot.fra.parse import FrenchParser
 from omnilingual import LanguageCode, PartOfSpeech
 from omnilingual.features import (
     Definite,
@@ -17,9 +18,6 @@ from omnilingual.features import (
     VerbForm,
 )
 
-from omniglot.fra.numbers import FrenchNumberConverter
-from omniglot.fra.parse import FrenchParser
-
 
 class TestFrenchParser(unittest.TestCase):
     def setUp(self):
@@ -28,11 +26,8 @@ class TestFrenchParser(unittest.TestCase):
         self.parser = FrenchParser()
 
     def test_parses_sentence_1(self):
-        tokenized = self.parser.process(
-            Text(
-                "Elle avait chevillé au corps le refus d’un destin préétabli.",
-                LanguageCode.French,
-            )
+        tokens = self.parser.process(
+            "Elle avait chevillé au corps le refus d’un destin préétabli."
         )
 
         expected_tokens = [
@@ -143,14 +138,11 @@ class TestFrenchParser(unittest.TestCase):
             PunctuationToken(".", sticks_left=True),
         ]
 
-        self.assertListEqual(tokenized.tokens, expected_tokens)
+        self.assertListEqual(tokens, expected_tokens)
 
     def test_parses_sentence_2(self):
-        tokenized = self.parser.process(
-            Text(
-                "Malgré la présence de Simandou, plus grand gisement de fer non exploité au monde, sur son territoire, le pays d’Afrique de l’Ouest n’en a pas extrait un seul gramme en vingt ans.",
-                LanguageCode.French,
-            )
+        tokens = self.parser.process(
+            "Malgré la présence de Simandou, plus grand gisement de fer non exploité au monde, sur son territoire, le pays d’Afrique de l’Ouest n’en a pas extrait un seul gramme en vingt ans."
         )
 
         expected_tokens = [
@@ -383,14 +375,11 @@ class TestFrenchParser(unittest.TestCase):
             PunctuationToken(".", sticks_left=True),
         ]
 
-        self.assertListEqual(tokenized.tokens, expected_tokens)
+        self.assertListEqual(tokens, expected_tokens)
 
     def test_parses_sentence_3(self):
-        tokenized = self.parser.process(
-            Text(
-                "En Guinée, le fer est pavé de mauvaises intentions",
-                LanguageCode.French,
-            )
+        tokens = self.parser.process(
+            "En Guinée, le fer est pavé de mauvaises intentions"
         )
 
         expected_tokens = [
@@ -460,21 +449,21 @@ class TestFrenchParser(unittest.TestCase):
             ),
         ]
 
-        self.assertListEqual(tokenized.tokens, expected_tokens)
+        self.assertListEqual(tokens, expected_tokens)
 
 
 class TestFrenchNumbers(unittest.TestCase):
     def test_converts_numbers(self):
         self.assertListEqual(
-            FrenchNumberConverter.convert_number(1),
+            FrenchNumberConverter.verbalize_number(1),
             [WordToken("un", LanguageCode.French, pos=PartOfSpeech.Number)],
         ),
         self.assertEqual(
-            FrenchNumberConverter.convert_number(12),
+            FrenchNumberConverter.verbalize_number(12),
             [WordToken("douze", LanguageCode.French, pos=PartOfSpeech.Number)],
         )
         self.assertEqual(
-            FrenchNumberConverter.convert_number(202),
+            FrenchNumberConverter.verbalize_number(202),
             [
                 WordToken("deux", LanguageCode.French, pos=PartOfSpeech.Number),
                 PunctuationToken("-", sticks_left=True, sticks_right=True),
@@ -484,7 +473,7 @@ class TestFrenchNumbers(unittest.TestCase):
             ],
         )
         self.assertEqual(
-            FrenchNumberConverter.convert_number(95),
+            FrenchNumberConverter.verbalize_number(95),
             [
                 WordToken("quatre", LanguageCode.French, pos=PartOfSpeech.Number),
                 PunctuationToken("-", sticks_left=True, sticks_right=True),

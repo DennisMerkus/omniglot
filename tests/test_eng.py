@@ -1,6 +1,5 @@
 import unittest
 
-from documental import Text
 from documental.token import PunctuationToken, WordToken
 from omnilingual import LanguageCode, PartOfSpeech
 
@@ -12,9 +11,7 @@ class TestEnglish(unittest.TestCase):
         self.parser = EnglishParser()
 
     def test_parses_sentences(self):
-        tokenized = self.parser.process(
-            Text("A fast-changing world can be a lonely place.", LanguageCode.English,)
-        )
+        tokens = self.parser.process("A fast-changing world can be a lonely place.")
 
         expected_tokens = [
             WordToken("A", LanguageCode.English, "a", pos=PartOfSpeech.Determiner),
@@ -32,7 +29,7 @@ class TestEnglish(unittest.TestCase):
             PunctuationToken("."),
         ]
 
-        self.assertListEqual(tokenized.tokens, expected_tokens)
+        self.assertListEqual(tokens, expected_tokens)
 
 
 if __name__ == "__main__":

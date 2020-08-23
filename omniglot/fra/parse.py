@@ -3,18 +3,17 @@ from typing import List
 import spacy
 from spacy.pipeline import Sentencizer
 
-from documental import Text, Tokens
 from documental.token import Ellision, Token, WordToken
 from omniglot.mul.numbers import combine_numbers
 from omniglot.mul.punctuation import convert_punctuation_tokens
-from omniglot.parser import PipelineAnnotator
+from omniglot.parser import NaturalLanguageProcessor
 from omnilingual import LanguageCode, PartOfSpeech
 from omnilingual.features import Features, Tense, VerbForm, parse_features
 
 from .numbers import FrenchNumberConverter
 
 
-class FrenchParser(PipelineAnnotator):
+class FrenchParser(NaturalLanguageProcessor):
     def __init__(self):
         super().__init__()
 
@@ -22,17 +21,21 @@ class FrenchParser(PipelineAnnotator):
 
         self.nlp.add_pipe(Sentencizer())
 
-        self.add_pipe(self.tokenize)
-        self.add_pipe(combine_numbers)
-        self.add_pipe(convert_punctuation_tokens)
+    def process(self, text: str) -> List[Token]:
+        tokens: List[Token] = self.tokenize(text)
+
+        tokens = combine_numbers(tokens)
+        tokens = convert_punctuation_tokens(tokens)
+
+        return tokens
 
     def supported_languages(self) -> List[LanguageCode]:
         return [LanguageCode.French]
 
-    def tokenize(self, text: Text, tokenized: Tokens) -> None:
+    def tokenize(self, text: str) -> List[Token]:
         tokens: List[Token] = []
 
-        for token in self.nlp(text.text):
+        for token in self.nlp(text):
             print(token.text, token.lemma_, token.pos_, token.tag_)
 
             lemma: str
@@ -60,7 +63,7 @@ class FrenchParser(PipelineAnnotator):
         tokens = self.fix_ellisions(tokens)
         tokens = self.fix_auxiliary_verb_phrases(tokens)
 
-        tokenized.tokens.extend(tokens)
+        return tokens
 
     def fix_ellisions(self, tokens: List[Token]) -> List[Token]:
         ellided_tokens: List[Token] = []

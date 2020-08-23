@@ -1,13 +1,13 @@
 import unittest
 
-from documental.token import PunctuationToken, WordToken
-from omniglot.ara.parse import ArabicParser
+from omniglot.omni import OmnilingualProcessor
+
 from omnilingual import LanguageCode
 
 
-class TestArabic(unittest.TestCase):
+class TestOmni(unittest.TestCase):
     def setUp(self):
-        self.parser = ArabicParser()
+        self.omni = OmnilingualProcessor()
 
         self.maxDiff = None
 

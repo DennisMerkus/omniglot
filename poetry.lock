@@ -189,10 +189,10 @@ description = "Unified interface for handling different structured document type
 name = "documental"
 optional = false
 python-versions = ">=3.8"
-version = "0.3.0"
+version = "0.4.1"
 
 [package.source]
-reference = "02bfc432de504acbbb54bbb001dd0c1e6815aa67"
+reference = "20b10746abca98dcfeedec1604491a3b4cdda9af"
 type = "git"
 url = "https://github.com/DennisMerkus/documental.git"
 
@@ -274,6 +274,14 @@ sudachipy = ">=0.4.5"
 reference = ""
 type = "url"
 url = "https://github.com/explosion/spacy-models/releases/download/ja_core_news_md-2.3.1/ja_core_news_md-2.3.1.tar.gz"
+
+[[package]]
+category = "main"
+description = "Chinese Words Segmentation Utilities"
+name = "jieba"
+optional = false
+python-versions = "*"
+version = "0.42.1"
 
 [[package]]
 category = "main"
@@ -391,6 +399,18 @@ version = "0.8.0"
 
 [[package]]
 category = "main"
+description = "A small package for Chinese word segmentation"
+name = "pkuseg"
+optional = false
+python-versions = "*"
+version = "0.0.25"
+
+[package.dependencies]
+cython = "*"
+numpy = ">=1.16.0"
+
+[[package]]
+category = "main"
 description = "The smartest command line arguments parser in the world"
 name = "plac"
 optional = false
@@ -435,6 +455,7 @@ spacy = ">=2.3.0,<2.4.0"
 reference = ""
 type = "url"
 url = "https://github.com/explosion/spacy-models/releases/download/pt_core_news_sm-2.3.0/pt_core_news_sm-2.3.0.tar.gz"
+
 [[package]]
 category = "dev"
 description = "library with cross-python path, ini-parsing, io, code, log facilities"
@@ -746,8 +767,43 @@ optional = false
 python-versions = "*"
 version = "0.7.1"
 
+[[package]]
+category = "main"
+description = "Chinese multi-task CNN trained on OntoNotes. Assigns word vectors, POS tags, dependency parse and named entities. Word vectors trained using FastText CBOW on Wikipedia and OSCAR (Common Crawl)."
+name = "zh_core_web_md"
+optional = false
+python-versions = "*"
+version = "2.3.1"
+
+[package.dependencies]
+jieba = "*"
+pkuseg = ">=0.0.22"
+spacy = ">=2.3.0,<2.4.0"
+
+[package.source]
+reference = ""
+type = "url"
+url = "https://github.com/explosion/spacy-models/releases/download/zh_core_web_md-2.3.1/zh_core_web_md-2.3.1.tar.gz"
+[[package]]
+category = "main"
+description = "Chinese multi-task CNN trained on OntoNotes. Assigns context-specific token vectors, POS tags, dependency parse and named entities."
+name = "zh_core_web_sm"
+optional = false
+python-versions = "*"
+version = "2.3.1"
+
+[package.dependencies]
+jieba = "*"
+pkuseg = ">=0.0.22"
+spacy = ">=2.3.0,<2.4.0"
+
+[package.source]
+reference = ""
+type = "url"
+url = "https://github.com/explosion/spacy-models/releases/download/zh_core_web_sm-2.3.1/zh_core_web_sm-2.3.1.tar.gz"
+
 [metadata]
-content-hash = "5dd399bbe5a9c00f948464d209919249b71ea7f1dfca21fb81a4b1786ab3db14"
+content-hash = "68f04a1bdb426ca9a049e2d50f107b4ae32cae006f7c679e6d1d4d7e3e9607dc"
 lock-version = "1.0"
 python-versions = "^3.8"
 
@@ -906,6 +962,9 @@ iniconfig = [
     {file = "iniconfig-1.0.1.tar.gz", hash = "sha256:e5f92f89355a67de0595932a6c6c02ab4afddc6fcdc0bfc5becd0d60884d3f69"},
 ]
 ja_core_news_md = []
+jieba = [
+    {file = "jieba-0.42.1.tar.gz", hash = "sha256:055ca12f62674fafed09427f176506079bc135638a14e23e25be909131928db2"},
+]
 lxml = [
     {file = "lxml-4.5.2-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:74f48ec98430e06c1fa8949b49ebdd8d27ceb9df8d3d1c92e1fdc2773f003f20"},
     {file = "lxml-4.5.2-cp27-cp27m-manylinux1_i686.whl", hash = "sha256:e70d4e467e243455492f5de463b72151cc400710ac03a0678206a5f27e79ddef"},
@@ -1025,6 +1084,21 @@ packaging = [
 pathspec = [
     {file = "pathspec-0.8.0-py2.py3-none-any.whl", hash = "sha256:7d91249d21749788d07a2d0f94147accd8f845507400749ea19c1ec9054a12b0"},
     {file = "pathspec-0.8.0.tar.gz", hash = "sha256:da45173eb3a6f2a5a487efba21f050af2b41948be6ab52b6a1e3ff22bb8b7061"},
+]
+pkuseg = [
+    {file = "pkuseg-0.0.25-cp35-cp35m-macosx_10_6_intel.whl", hash = "sha256:316f5885f1e0d183ca0c690faff1fbd67a39dc79db323451a7e232df03227806"},
+    {file = "pkuseg-0.0.25-cp35-cp35m-manylinux1_x86_64.whl", hash = "sha256:41da7ba519e69e0efa790394aba81877866109f5eda67ba9fe33dadf7284b0f2"},
+    {file = "pkuseg-0.0.25-cp35-cp35m-win_amd64.whl", hash = "sha256:2dfa46c3c27a01304245cbf25cb3a387f0fb365cc5f70d1a686d14f80f758012"},
+    {file = "pkuseg-0.0.25-cp36-cp36m-macosx_10_6_intel.whl", hash = "sha256:386e64cac9336f7b4f7ab27a802ecebf01ad6ad06ccebef0c7606fb843fcf55c"},
+    {file = "pkuseg-0.0.25-cp36-cp36m-manylinux1_x86_64.whl", hash = "sha256:4f550fe17e452742814dcd9fbc7e4b1497679199e3119730ec887f40a008461a"},
+    {file = "pkuseg-0.0.25-cp36-cp36m-win_amd64.whl", hash = "sha256:5978e27e7b1e3561f9b5ca47ee4cfafed851dbffb120d57666abbf55cb345050"},
+    {file = "pkuseg-0.0.25-cp37-cp37m-macosx_10_6_intel.whl", hash = "sha256:a8fa96f511c757a6691b00d396fdb3f516979a93e4a4b331cc62a826a078d4a5"},
+    {file = "pkuseg-0.0.25-cp37-cp37m-manylinux1_x86_64.whl", hash = "sha256:6fc2f97d0f66cc6722cf772e65dbcde1b01d8cc53b66ac4aa7bce639de79588f"},
+    {file = "pkuseg-0.0.25-cp37-cp37m-win_amd64.whl", hash = "sha256:1f4fedbc973529997f1a54ba6e440280cf0c115f6a1344ef8109b20d7fc43b6f"},
+    {file = "pkuseg-0.0.25-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:860d1cc2a0b6896ee4a6118f0a8fa9a3ae75d6074922bf22188319fa7e717969"},
+    {file = "pkuseg-0.0.25-cp38-cp38-win_amd64.whl", hash = "sha256:d0276d3458d5e58feed787aa826658c96900250470081b55a9dff38fcc38eab6"},
+    {file = "pkuseg-0.0.25-cp38-cp38m-manylinux1_x86_64.whl", hash = "sha256:8a2d9b398ef15459d1e0a48115da0fe436c43881da628083b289cd27536d91e6"},
+    {file = "pkuseg-0.0.25.tar.gz", hash = "sha256:dd012bf93689721c9574bc2b2ba98fb4ac22790cec0af354a78e217828b81e91"},
 ]
 plac = [
     {file = "plac-1.1.3-py2.py3-none-any.whl", hash = "sha256:487e553017d419f35add346c4c09707e52fa53f7e7181ce1098ca27620e9ceee"},
@@ -1245,3 +1319,5 @@ urllib3 = [
 wasabi = [
     {file = "wasabi-0.7.1.tar.gz", hash = "sha256:ee3809f4ce00e1e7f424b1572c753cff0dcaca2ca684e67e31f985033a9f070b"},
 ]
+zh_core_web_md = []
+zh_core_web_sm = []

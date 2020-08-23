@@ -1,38 +1,41 @@
 from typing import List
 
-from spacy.lang.zh import Chinese as SpacyChinese
+import spacy
 from spacy.pipeline import Sentencizer
 
-from documental import Text, Tokens
-from documental.token import WordToken
+from documental.token import Token, WordToken
 from omniglot.mul.numbers import combine_numbers
 from omniglot.mul.punctuation import convert_punctuation_tokens
 from omnilingual import LanguageCode, PartOfSpeech
 
-from ..parser import PipelineAnnotator
+from ..parser import NaturalLanguageProcessor
 
 
-class MandarinParser(PipelineAnnotator):
+class MandarinChineseParser(NaturalLanguageProcessor):
     def __init__(self):
         super().__init__()
 
-        # Use PKUSeg with spaCy 2.3
-        SpacyChinese.Defaults.use_jieba = False
-
-        self.nlp = SpacyChinese()
+        self.nlp = spacy.load("zh_core_web_md")
         self.nlp.add_pipe(Sentencizer())
 
-        self.add_pipe(self.tokenize)
-        self.add_pipe(combine_numbers)
-        self.add_pipe(convert_punctuation_tokens)
+    def process(self, text: str) -> List[Token]:
+        tokens: List[Token] = self.tokenize(text)
+
+        tokens = combine_numbers(tokens)
+        tokens = convert_punctuation_tokens(tokens)
+
+        return tokens
 
     def supported_languages(self) -> List[LanguageCode]:
         return [LanguageCode.Chinese]
 
-    @staticmethod
-    def tokenize(self, text: Text, tokenized: Tokens) -> None:
-        for token in self.nlp(text.text):
-            tokenized.tokens.append(
+    def tokenize(self, text: str) -> List[Token]:
+        tokens: List[Token] = []
+
+        for token in self.nlp(text):
+            print(token, token.pos_, token.lemma_, token.tag_)
+
+            tokens.append(
                 WordToken(
                     text=token.text,
                     language=LanguageCode.Chinese,
@@ -41,3 +44,5 @@ class MandarinParser(PipelineAnnotator):
                     tags=[],
                 )
             )
+
+        return tokens

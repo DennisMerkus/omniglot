@@ -1,5 +1,6 @@
 import unittest
 
+from omniglot.detect import guess_language
 from omniglot.omni import OmnilingualProcessor
 
 
@@ -15,7 +16,8 @@ class TestLanguageDetection(unittest.TestCase):
         ]
 
         for sentence in sentences:
-            language = self.Omni.guess_language(sentence)
+            language = guess_language(sentence)
+
             self.assertEqual(language, "rus")
 
 

@@ -4,7 +4,6 @@ from typing import List, Optional, Union
 
 import spacy
 
-from documental import Text, Tokens
 from documental.token import (
     LetterToken,
     NumberToken,
@@ -17,7 +16,7 @@ from omniglot.mul.punctuation import punctuation_sticks_left, punctuation_sticks
 from omnilingual import LanguageCode, PartOfSpeech
 
 from ..morpheme import Morpheme
-from ..parser import PipelineAnnotator
+from ..parser import NaturalLanguageProcessor
 
 # https://en.wikipedia.org/wiki/Japanese_grammar#Stem_forms
 
@@ -135,7 +134,7 @@ verb_conjugations = [
 ]
 
 
-class JapaneseParser(PipelineAnnotator):
+class JapaneseParser(NaturalLanguageProcessor):
     def __init__(self):
         super().__init__()
 
@@ -155,18 +154,25 @@ class JapaneseParser(PipelineAnnotator):
             "・",
         ]
 
+    def process(self, text: str) -> List[Token]:
+        tokens: List[Token] = self.tokenize(text)
+
         # TODO: Add all relevant number reading information to number tokens
-        self.add_pipe(self.spacy_tokenize)
-        self.add_pipe(combine_numbers)
-        self.add_pipe(self._combine_letters)
-        self.add_pipe(self._combine_verbs)
-        self.add_pipe(self.clean_mecab_data)
+        tokens = combine_numbers(tokens)
+        tokens = self._combine_letters(tokens)
+        tokens = self._combine_verbs(tokens)
+
+        self.clean_mecab_data(tokens)
+
+        return tokens
 
     def supported_languages(self) -> List[LanguageCode]:
         return [LanguageCode.Japanese]
 
-    def spacy_tokenize(self, text: Text, tokenized: Tokens) -> None:
-        for token in self.nlp(text.text):
+    def tokenize(self, text: str) -> List[Token]:
+        tokens: List[Token] = []
+
+        for token in self.nlp(text):
             pos: PartOfSpeech
 
             poses: List[str] = []
@@ -199,13 +205,13 @@ class JapaneseParser(PipelineAnnotator):
 
             if pos is PartOfSpeech.Punctuation:
                 if token.text in self.japanese_punctuation:
-                    tokenized.tokens.append(PunctuationToken(token.text))
+                    tokens.append(PunctuationToken(token.text))
 
                 elif (
                     token.text in punctuation_sticks_left
                     or token.text in punctuation_sticks_right
                 ):
-                    tokenized.tokens.append(
+                    tokens.append(
                         PunctuationToken(
                             text=token.text,
                             sticks_left=(token.text in punctuation_sticks_left),
@@ -215,16 +221,16 @@ class JapaneseParser(PipelineAnnotator):
                 elif len(token.text) == 1 and (
                     token.text.islower() or token.text.isupper()
                 ):
-                    tokenized.tokens.append(LetterToken(token.text))
+                    tokens.append(LetterToken(token.text))
                 else:
                     logging.debug("Unhandled punctuation %s" % (token.text))
-                    tokenized.tokens.append(PunctuationToken(token.text))
+                    tokens.append(PunctuationToken(token.text))
             elif pos is PartOfSpeech.Symbol:
-                tokenized.tokens.append(PunctuationToken(token.text))
+                tokens.append(PunctuationToken(token.text))
             elif pos is PartOfSpeech.Number:
-                tokenized.tokens.append(NumberToken(token.text))
+                tokens.append(NumberToken(token.text))
             elif pos is PartOfSpeech.Particle:
-                tokenized.tokens.append(
+                tokens.append(
                     WordToken(
                         language=LanguageCode.Japanese,
                         text=token.text,
@@ -233,7 +239,7 @@ class JapaneseParser(PipelineAnnotator):
                     )
                 )
             else:
-                tokenized.tokens.append(
+                tokens.append(
                     WordToken(
                         language=LanguageCode.Japanese,
                         text=token.text,
@@ -243,25 +249,27 @@ class JapaneseParser(PipelineAnnotator):
                     )
                 )
 
-    def clean_mecab_data(self, text: Text, tokenized: Tokens) -> None:
-        for token in tokenized.tokens:
+        return tokens
+
+    def clean_mecab_data(self, tokens: List[Token]) -> None:
+        for token in tokens:
             if isinstance(token, WordToken):
                 katakana = self._try_if_lemma_is_katakanago(token.lemma)
 
-                if katakana:
+                if katakana is not None:
                     token.lemma = katakana
 
                 lemma = self._try_if_lemma_is_coded(token.lemma)
 
-                if lemma:
+                if lemma is not None:
                     token.lemma = lemma
 
-    def _combine_letters(self, text: Text, tokenized: Tokens) -> None:
+    def _combine_letters(self, tokens: List[Token]) -> List[Token]:
         combined_tokens: List[Token] = []
 
         combined_letters: Optional[str] = None
 
-        for token in tokenized.tokens:
+        for token in tokens:
             if isinstance(token, LetterToken):
                 if combined_letters is None:
                     combined_letters = token.letter
@@ -307,17 +315,14 @@ class JapaneseParser(PipelineAnnotator):
                 )
             )
 
-        tokenized.tokens = combined_tokens
+        return combined_tokens
 
-    def _combine_verbs(self, text: Text, tokenized: Tokens) -> None:
-        if len(tokenized.tokens) == 0:
-            return
-
+    def _combine_verbs(self, tokens: List[Token]) -> List[Token]:
         combined_tokens: List[Token] = []
 
         current_verb: List[Morpheme] = []
 
-        for token in tokenized.tokens:
+        for token in tokens:
             if isinstance(token, WordToken):
                 if (
                     token.pos is PartOfSpeech.Auxiliary
@@ -359,7 +364,7 @@ class JapaneseParser(PipelineAnnotator):
         if len(current_verb) > 0:
             combined_tokens.append(self._create_new_word_from_morphemes(current_verb))
 
-        tokenized.tokens = combined_tokens
+        return combined_tokens
 
     def _create_new_word_from_morphemes(self, morphemes: List[Morpheme]):
         word_text = "".join(map(lambda x: x.text, morphemes))

@@ -1,14 +1,15 @@
-from documental import Text, Tokens
-from documental.token import WordToken
+from typing import List
+
+from documental.token import Token, WordToken
 
 
-def remove_extra_whitespace(text: Text, tokenized: Tokens) -> None:
+def remove_extra_whitespace(tokens: List[Token]) -> List[Token]:
     filtered_tokens = []
 
-    for token in tokenized.tokens:
+    for token in tokens:
         if isinstance(token, WordToken) and len(token.text.strip()) == 0:
             continue
         else:
             filtered_tokens.append(token)
 
-    tokenized.tokens = filtered_tokens
+    return filtered_tokens

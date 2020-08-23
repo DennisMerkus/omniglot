@@ -2,26 +2,10 @@ from typing import List
 
 from documental.token import NumberToken, Token
 
-
-def is_number(text: str) -> bool:
-    try:
-        int(text)
-
-        return True
-    except ValueError:
-        return False
+from ..numbers import NumberConverter
 
 
-def is_float(text: str) -> bool:
-    try:
-        float(text)
-
-        return True
-    except ValueError:
-        return False
-
-
-class NumberConverter(object):
+class JapaneseNumberConverter(NumberConverter):
     @staticmethod
     def parse(text: str) -> Token:
         raise NotImplementedError()

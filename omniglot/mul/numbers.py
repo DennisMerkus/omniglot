@@ -1,15 +1,14 @@
 from typing import List, Optional
 
-from documental import Text, Tokens
 from documental.token import Token, NumberToken
 
 
-def combine_numbers(text: Text, tokenized: Tokens) -> None:
+def combine_numbers(tokens: List[Token]) -> List[Token]:
     combined_tokens: List[Token] = []
 
     combined_number: Optional[str] = None
 
-    for token in tokenized.tokens:
+    for token in tokens:
         if isinstance(token, NumberToken):
             if combined_number is None:
                 combined_number = token.text
@@ -25,4 +24,4 @@ def combine_numbers(text: Text, tokenized: Tokens) -> None:
     if combined_number is not None:
         combined_tokens.append(NumberToken(combined_number))
 
-    tokenized.tokens = combined_tokens
+    return combined_tokens

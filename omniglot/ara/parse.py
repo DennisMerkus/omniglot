@@ -1,19 +1,18 @@
 import logging
-from typing import List
+from typing import List, Set
 
 from spacy.lang.ar import Arabic as SpacyArabic
 from spacy.pipeline import Sentencizer
 
-from documental import Text, Tokens
-from documental.token import WordToken
+from documental.token import Token, WordToken
 from omniglot.mul.numbers import combine_numbers
 from omniglot.mul.punctuation import convert_punctuation_tokens
 from omnilingual import LanguageCode, PartOfSpeech
 
-from ..parser import PipelineAnnotator
+from ..parser import NaturalLanguageProcessor
 
 
-class ArabicParser(PipelineAnnotator):
+class ArabicParser(NaturalLanguageProcessor):
     def __init__(self):
         super().__init__()
 
@@ -21,15 +20,21 @@ class ArabicParser(PipelineAnnotator):
 
         self.nlp.add_pipe(Sentencizer())
 
-        self.add_pipe(self.tokenize)
-        self.add_pipe(convert_punctuation_tokens)
-        self.add_pipe(combine_numbers)
+    def process(self, text: str) -> List[Token]:
+        tokens: List[Token] = self.tokenize(text)
 
-    def supported_languages(self) -> List[LanguageCode]:
-        return [LanguageCode.Arabic]
+        tokens = convert_punctuation_tokens(tokens)
+        tokens = combine_numbers(tokens)
 
-    def tokenize(self, text: Text, tokenized: Tokens) -> None:
-        for token in self.nlp(text.text):
+        return tokens
+
+    def supported_languages(self) -> Set[LanguageCode]:
+        return set([LanguageCode.Arabic])
+
+    def tokenize(self, text: str) -> List[Token]:
+        tokens: List[Token] = []
+
+        for token in self.nlp(text):
             logging.debug(
                 "%s %s %s %s" % (token.text, token.lemma_, token.pos_, token.tag_)
             )
@@ -40,7 +45,8 @@ class ArabicParser(PipelineAnnotator):
                 lemma=token.lemma_,
                 pos=PartOfSpeech.Nil,
                 text=token.text,
-                tags=[token.tag_],
             )
 
-            tokenized.tokens.append(word)
+            tokens.append(word)
+
+        return tokens

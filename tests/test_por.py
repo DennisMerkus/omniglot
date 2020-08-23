@@ -1,6 +1,5 @@
 import unittest
 
-from documental import Text
 from documental.token import PunctuationToken, WordToken
 from omnilingual import LanguageCode, PartOfSpeech
 from omnilingual.features import (
@@ -22,12 +21,11 @@ class TestPortuguese(unittest.TestCase):
     def setUp(self):
         self.parser = PortugueseParser()
 
+        self.maxDiff = None
+
     def test_parses_sentences(self):
-        tokenized = self.parser.process(
-            Text(
-                "O coronavírus ataca as pessoas de maneiras diferentes.",
-                LanguageCode.Portuguese,
-            )
+        tokens = self.parser.process(
+            "O coronavírus ataca as pessoas de maneiras diferentes."
         )
 
         expected_tokens = [
@@ -37,61 +35,69 @@ class TestPortuguese(unittest.TestCase):
                 "o",
                 pos=PartOfSpeech.Determiner,
                 features=Features(
-                    definite=Definite.Def,
-                    gender=Gender.Masc,
-                    number=Number.Sing,
-                    pron_type=PronType.Art,
+                    Definite=Definite.Def,
+                    Gender=Gender.Masc,
+                    Number=Number.Sing,
+                    PronType=PronType.Art,
                 ),
             ),
             WordToken(
                 "coronavírus",
                 LanguageCode.Portuguese,
                 pos=PartOfSpeech.Noun,
-                features=Features(gender=Gender.Masc, number=Number.Sing),
+                features=Features(Gender=Gender.Masc, Number=Number.Sing),
             ),
             WordToken(
                 "ataca",
                 LanguageCode.Portuguese,
+                "atacar",
                 pos=PartOfSpeech.Verb,
                 features=Features(
-                    mood=Mood.Ind,
-                    number=Number.Sing,
-                    person=Person.Third,
-                    tense=Tense.Pres,
-                    verb_form=VerbForm.Fin,
+                    Mood=Mood.Ind,
+                    Number=Number.Sing,
+                    Person=Person.Third,
+                    Tense=Tense.Pres,
+                    VerbForm=VerbForm.Fin,
                 ),
             ),
             WordToken(
                 "as",
                 LanguageCode.Portuguese,
+                "o",
                 pos=PartOfSpeech.Determiner,
                 features=Features(
-                    definite=Definite.Def,
-                    gender=Gender.Fem,
-                    number=Number.Plur,
-                    pron_type=PronType.Art,
+                    Definite=Definite.Def,
+                    Gender=Gender.Fem,
+                    Number=Number.Plur,
+                    PronType=PronType.Art,
                 ),
             ),
             WordToken(
                 "pessoas",
                 LanguageCode.Portuguese,
-                features=Features(gender=Gender.Fem, number=Number.Plur),
+                "pessoa",
+                pos=PartOfSpeech.Noun,
+                features=Features(Gender=Gender.Fem, Number=Number.Plur),
             ),
-            WordToken("de", LanguageCode.Portuguese),
+            WordToken("de", LanguageCode.Portuguese, "de", PartOfSpeech.Adposition),
             WordToken(
                 "maneiras",
                 LanguageCode.Portuguese,
-                features=Features(gender=Gender.Fem, number=Number.Plur),
+                "maneiro",
+                pos=PartOfSpeech.Noun,
+                features=Features(Gender=Gender.Fem, Number=Number.Plur),
             ),
             WordToken(
                 "diferentes",
                 LanguageCode.Portuguese,
-                features=Features(gender=Gender.Fem, number=Number.Plur),
+                "diferente",
+                pos=PartOfSpeech.Adjective,
+                features=Features(Gender=Gender.Fem, Number=Number.Plur),
             ),
-            PunctuationToken("."),
+            PunctuationToken(".", sticks_left=True),
         ]
 
-        self.assertListEqual(tokenized.tokens, expected_tokens)
+        self.assertListEqual(tokens, expected_tokens)
 
 
 if __name__ == "__main__":

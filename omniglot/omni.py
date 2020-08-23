@@ -1,9 +1,7 @@
 import logging
 import string
 from collections import defaultdict
-from typing import Dict, List, Optional, Tuple
-
-import pycld2
+from typing import Dict, List, Tuple
 
 from documental import Text, Tokens
 from documental.document import Document, ParentDocument
@@ -11,26 +9,27 @@ from documental.token import PunctuationToken, SpaceToken, WordToken
 from omnilingual import Language, LanguageCode
 
 from .ara.parse import ArabicParser
+from .detect import guess_language
 from .deu.parse import GermanParser
 from .eng.parse import EnglishParser
 from .fra.parse import FrenchParser
 from .jpn.parse import JapaneseParser
 from .lexeme import Lexeme
 from .lookup import LemmaNotFoundError, LexemeLookup
-from .parser import Annotator
+from .parser import NaturalLanguageProcessor
 from .por.parse import PortugueseParser
 from .rus.parse import RussianParser
-from .zho.parse import MandarinParser
+from .zho.parse import MandarinChineseParser
 
 
-class NaturalLanguageProcessor(object):
+class DocumentProcessor(object):
     async def process(self, document: Document) -> Document:
         raise NotImplementedError()
 
 
-class OmnilingualProcessor(NaturalLanguageProcessor):
+class OmnilingualProcessor(DocumentProcessor):
     def __init__(self, lexeme_lookup: LexemeLookup):
-        self.parsers: Dict[LanguageCode, Annotator] = {
+        self.parsers: Dict[LanguageCode, NaturalLanguageProcessor] = {
             LanguageCode.Arabic: ArabicParser(),
             LanguageCode.English: EnglishParser(),
             LanguageCode.French: FrenchParser(),
@@ -38,7 +37,7 @@ class OmnilingualProcessor(NaturalLanguageProcessor):
             LanguageCode.Japanese: JapaneseParser(),
             LanguageCode.Portuguese: PortugueseParser(),
             LanguageCode.Russian: RussianParser(),
-            LanguageCode.Chinese: MandarinParser(),
+            LanguageCode.Chinese: MandarinChineseParser(),
         }
 
         self.lexeme_lookup = lexeme_lookup
@@ -111,30 +110,6 @@ class OmnilingualProcessor(NaturalLanguageProcessor):
                         % (token.pos, token.lemma, token.text)
                     )
 
-    def guess_language(
-        self, text: str, hintLanguage: Optional[Language] = None
-    ) -> Language:
-        if hintLanguage is not None and hintLanguage.code != LanguageCode.Undetermined:
-            is_reliable, _, details = pycld2.detect(
-                text, hintLanguage=hintLanguage.original_or_alpha_2()
-            )
-        else:
-            is_reliable, _, details = pycld2.detect(text, bestEffort=True)
-
-        detected_languages: Dict[str, int] = defaultdict(int)
-
-        highest_language = "un"
-        highest_score = 0
-
-        for name, code, percent, score in details:
-            detected_languages[code] += percent
-
-            if detected_languages[code] > highest_score:
-                highest_score = detected_languages[code]
-                highest_language = code
-
-        return Language.where(tag=highest_language)
-
     def detect_languages(
         self, document: Document
     ) -> Tuple[Dict[str, str], Dict[str, str]]:
@@ -148,7 +123,7 @@ class OmnilingualProcessor(NaturalLanguageProcessor):
 
         for node in document:
             if isinstance(node, Text):
-                language = self.guess_language(node.text)
+                language = guess_language(node.text)
                 document_languages[node.id] = language
 
                 language_counts[language.specific] += 1
@@ -204,12 +179,12 @@ class OmnilingualProcessor(NaturalLanguageProcessor):
             if language.code is LanguageCode.Undetermined:
                 continue
 
-            nudged_language = self.guess_language(text, hintLanguage=language)
+            nudged_language = guess_language(text, language_hint=language)
 
             if nudged_language == language:
                 return nudged_language
 
-        return Language.where(tag=LanguageCode.Undetermined.value)
+        return Language.where(code=LanguageCode.Undetermined)
 
     @staticmethod
     def token_sticks_right(token):

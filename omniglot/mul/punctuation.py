@@ -1,6 +1,5 @@
 from typing import List
 
-from documental import Text, Tokens
 from documental.token import PunctuationToken, Token, WordToken
 
 punctuation = [
@@ -19,10 +18,10 @@ punctuation_sticks_right = ["(", ">", "{", "[", "«", "»"]
 all_punctuation = punctuation + punctuation_sticks_left + punctuation_sticks_right
 
 
-def convert_punctuation_tokens(text: Text, tokenized: Tokens) -> None:
+def convert_punctuation_tokens(tokens: List[Token]) -> List[Token]:
     converted_tokens: List[Token] = []
 
-    for token in tokenized.tokens:
+    for token in tokens:
         if isinstance(token, WordToken) and token.text in all_punctuation:
             converted_tokens.append(
                 PunctuationToken(
@@ -34,4 +33,4 @@ def convert_punctuation_tokens(text: Text, tokenized: Tokens) -> None:
         else:
             converted_tokens.append(token)
 
-    tokenized.tokens = converted_tokens
+    return converted_tokens

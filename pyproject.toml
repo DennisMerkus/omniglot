@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "omniglot"
-version = "0.2.0"
+version = "0.3.0"
 description = "Language processing and annotation for language learning in multiple languages"
 authors = ["Dennis Merkus <dennis.merkus@pm.me>"]
 license = "MIT"
@@ -29,6 +29,7 @@ lxml = "^4.5.2"
 beautifulsoup4 = "^4.9.1"
 num2words = "^0.5.10"
 pt-core-news-sm = {url = "https://github.com/explosion/spacy-models/releases/download/pt_core_news_sm-2.3.0/pt_core_news_sm-2.3.0.tar.gz"}
+zh-core-web-md = {url = "https://github.com/explosion/spacy-models/releases/download/zh_core_web_md-2.3.1/zh_core_web_md-2.3.1.tar.gz"}
 
 [tool.poetry.dev-dependencies]
 black = "^19.10b0"

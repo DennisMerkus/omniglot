@@ -1,29 +1,27 @@
 import unittest
 
-from documental import Text
 from documental.token import PunctuationToken, WordToken
+from omniglot.rus.parse import RussianParser
 from omnilingual import LanguageCode, PartOfSpeech
 from omnilingual.features import Animacy, Case, Features, Gender, Number
-
-from omniglot.rus.parse import RussianParser
 
 
 class TestRussian(unittest.TestCase):
     def setUp(self):
         self.parser = RussianParser()
 
+        self.maxDiff = None
+
     def test_parses_sentences(self):
-        tokenized = self.parser.process(
-            Text(
-                "Райан Рейнольдс и Хью Джекман годами троллили друг друга.",
-                LanguageCode.Russian,
-            )
+        tokens = self.parser.process(
+            "Райан Рейнольдс и Хью Джекман годами троллили друг друга."
         )
 
         expected_tokens = [
             WordToken(
                 "Райан",
                 LanguageCode.Russian,
+                "райан",
                 pos=PartOfSpeech.Noun,
                 features=Features(
                     Animacy=Animacy.Anim,
@@ -35,6 +33,7 @@ class TestRussian(unittest.TestCase):
             WordToken(
                 "Рейнольдс",
                 LanguageCode.Russian,
+                "рейнольдс",
                 pos=PartOfSpeech.Noun,
                 features=Features(
                     Animacy=Animacy.Anim,
@@ -47,6 +46,7 @@ class TestRussian(unittest.TestCase):
             WordToken(
                 "Хью",
                 LanguageCode.Russian,
+                "хью",
                 pos=PartOfSpeech.Noun,
                 features=Features(
                     Animacy=Animacy.Anim,
@@ -58,6 +58,7 @@ class TestRussian(unittest.TestCase):
             WordToken(
                 "Джекман",
                 LanguageCode.Russian,
+                "джекман",
                 pos=PartOfSpeech.Noun,
                 features=Features(
                     Animacy=Animacy.Anim,
@@ -92,6 +93,7 @@ class TestRussian(unittest.TestCase):
             WordToken(
                 "друга",
                 LanguageCode.Russian,
+                "друг",
                 pos=PartOfSpeech.Noun,
                 features=Features(
                     Animacy=Animacy.Anim,
@@ -100,10 +102,10 @@ class TestRussian(unittest.TestCase):
                     Case=Case.Gen,
                 ),
             ),
-            PunctuationToken("."),
+            PunctuationToken(".", sticks_left=True),
         ]
 
-        self.assertListEqual(tokenized.tokens, expected_tokens)
+        self.assertListEqual(tokens, expected_tokens)
 
 
 if __name__ == "__main__":

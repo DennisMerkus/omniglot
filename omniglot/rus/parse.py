@@ -4,8 +4,7 @@ import pymorphy2
 from pymorphy2.tagset import OpencorporaTag
 from spacy.lang.ru import Russian as SpacyRussian
 
-from documental import Text, Tokens
-from documental.token import WordToken
+from documental.token import WordToken, Token
 from omniglot.mul.numbers import combine_numbers
 from omniglot.mul.punctuation import convert_punctuation_tokens
 from omniglot.mul.whitespace import remove_extra_whitespace
@@ -23,26 +22,32 @@ from omnilingual.features import (
     Voice,
 )
 
-from ..parser import PipelineAnnotator
+from ..parser import NaturalLanguageProcessor
 
 
-class RussianParser(PipelineAnnotator):
+class RussianParser(NaturalLanguageProcessor):
     def __init__(self):
         super().__init__()
 
         self.nlp = SpacyRussian()
         self.morphy = pymorphy2.MorphAnalyzer()
 
-        self.add_pipe(self.tokenize)
-        self.add_pipe(convert_punctuation_tokens)
-        self.add_pipe(combine_numbers)
-        self.add_pipe(remove_extra_whitespace)
+    def process(self, text: str) -> List[Token]:
+        tokens: List[Token] = self.tokenize(text)
+
+        tokens = convert_punctuation_tokens(tokens)
+        tokens = combine_numbers(tokens)
+        tokens = remove_extra_whitespace(tokens)
+
+        return tokens
 
     def supported_languages(self) -> List[LanguageCode]:
         return [LanguageCode.Russian]
 
-    def tokenize(self, text: Text, tokenized: Tokens) -> None:
-        for token in self.nlp(text.text):
+    def tokenize(self, text: str) -> List[Token]:
+        tokens: List[Token] = []
+
+        for token in self.nlp(text):
             parse = self.morphy.parse(token.text)[0]
 
             tag: OpencorporaTag = parse.tag
@@ -57,7 +62,9 @@ class RussianParser(PipelineAnnotator):
                 features=self.convert_features(tag),
             )
 
-            tokenized.tokens.append(word)
+            tokens.append(word)
+
+        return tokens
 
     def convert_pos(self, pos: Optional[str]) -> PartOfSpeech:
         if pos is None:
