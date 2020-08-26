@@ -47,7 +47,7 @@ class OmnilingualProcessor(DocumentProcessor):
 
         for node in document:
             if node.id in document_languages:
-                node.language = document_languages[node.id]
+                node.language = document_languages[node.id].code
 
         tokenized = self.tokenize(document)
 
@@ -112,14 +112,14 @@ class OmnilingualProcessor(DocumentProcessor):
 
     def detect_languages(
         self, document: Document
-    ) -> Tuple[Dict[str, str], Dict[str, str]]:
+    ) -> Tuple[Dict[str, Language], Dict[str, Language]]:
         # 1. Make a pass to detect languages for each TextDocument
         #    Mark unreliable and unknown texts
         # 2. Calculate the most likely languages
         document_languages: Dict[str, Language] = {}
         language_counts: Dict[str, int] = defaultdict(int)
 
-        uncertain_guesses: Dict[str, str] = {}
+        uncertain_guesses: Dict[str, Language] = {}
 
         for node in document:
             if isinstance(node, Text):
@@ -144,7 +144,7 @@ class OmnilingualProcessor(DocumentProcessor):
             )
         )
 
-        new_uncertain_guesses = {}
+        new_uncertain_guesses: Dict[str, Language] = {}
 
         for id, text in uncertain_guesses.items():
             stripped_punctuation = text.translate(
@@ -165,12 +165,7 @@ class OmnilingualProcessor(DocumentProcessor):
             else:
                 new_uncertain_guesses[id] = text
 
-        language_guesses = {}
-
-        for id, language in document_languages.items():
-            language_guesses[id] = language.alpha_3
-
-        return language_guesses, new_uncertain_guesses
+        return document_languages, new_uncertain_guesses
 
     def guess_by_nudging_ranked_languages(
         self, text: str, language_rank: List[Language]
