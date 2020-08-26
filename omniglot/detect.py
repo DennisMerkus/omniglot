@@ -7,9 +7,11 @@ from omnilingual import Language, LanguageCode
 
 
 def guess_language(text: str, language_hint: Optional[Language] = None) -> Language:
+
     if language_hint is not None and language_hint.code != LanguageCode.Undetermined:
+        # TODO: Have more sophisticated language selection 'with_region' instead of 'original'
         is_reliable, _, details = pycld2.detect(
-            text, hintLanguage=language_hint.original_or_alpha_2()
+            text, hintLanguage=language_hint.alpha_2
         )
     else:
         is_reliable, _, details = pycld2.detect(text, bestEffort=True)
