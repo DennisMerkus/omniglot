@@ -784,26 +784,9 @@ spacy = ">=2.3.0,<2.4.0"
 reference = ""
 type = "url"
 url = "https://github.com/explosion/spacy-models/releases/download/zh_core_web_md-2.3.1/zh_core_web_md-2.3.1.tar.gz"
-[[package]]
-category = "main"
-description = "Chinese multi-task CNN trained on OntoNotes. Assigns context-specific token vectors, POS tags, dependency parse and named entities."
-name = "zh_core_web_sm"
-optional = false
-python-versions = "*"
-version = "2.3.1"
-
-[package.dependencies]
-jieba = "*"
-pkuseg = ">=0.0.22"
-spacy = ">=2.3.0,<2.4.0"
-
-[package.source]
-reference = ""
-type = "url"
-url = "https://github.com/explosion/spacy-models/releases/download/zh_core_web_sm-2.3.1/zh_core_web_sm-2.3.1.tar.gz"
 
 [metadata]
-content-hash = "68f04a1bdb426ca9a049e2d50f107b4ae32cae006f7c679e6d1d4d7e3e9607dc"
+content-hash = "3c9b321b937f515a6de9329a0cece18e7db31943be6035bf43efe2099619353c"
 lock-version = "1.0"
 python-versions = "^3.8"
 
@@ -1320,4 +1303,3 @@ wasabi = [
     {file = "wasabi-0.7.1.tar.gz", hash = "sha256:ee3809f4ce00e1e7f424b1572c753cff0dcaca2ca684e67e31f985033a9f070b"},
 ]
 zh_core_web_md = []
-zh_core_web_sm = []

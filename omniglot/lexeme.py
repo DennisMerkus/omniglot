@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional, Set, Union
 
 from omnilingual import LanguageCode
 
@@ -16,7 +16,7 @@ class LexemeIdentifier(BaseModel):
 class Lexeme(LexemeIdentifier):
     tags: Set[str] = set()
 
-    orthography: Dict[str, str]
+    orthography: Dict[str, Union[str, List[str]]]
     pronounce: Dict[str, str] = {}
 
     senses: List[Sense]
