@@ -72,7 +72,7 @@ class OmnilingualProcessor(DocumentProcessor):
 
                 return document
             elif document.language in self.parsers.keys():
-                return self.parsers[document.language].process(document)
+                return self.parsers[document.language].process(document.text)
             else:
                 logging.warning(
                     "[Omni] Unrecognized language %s\n%s"
