@@ -137,7 +137,7 @@ def create_CC_CEDICT_database_entries(
                     Hant=entry.traditional,
                     Hans=entry.simplified,
                 ),
-                pronounce={"pinyin": [entry.pinyin]},
+                pronounce={"pinyin": entry.pinyin},
                 tags=[],
                 senses=senses,
                 features={},
