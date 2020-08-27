@@ -4,7 +4,6 @@ import spacy
 from spacy.pipeline import Sentencizer
 
 from documental.token import Ellision, Token, WordToken
-from omniglot.mul.numbers import combine_numbers
 from omniglot.mul.punctuation import convert_punctuation_tokens
 from omniglot.parser import NaturalLanguageProcessor
 from omnilingual import LanguageCode, PartOfSpeech
@@ -24,7 +23,6 @@ class FrenchParser(NaturalLanguageProcessor):
     def process(self, text: str) -> List[Token]:
         tokens: List[Token] = self.tokenize(text)
 
-        tokens = combine_numbers(tokens)
         tokens = convert_punctuation_tokens(tokens)
 
         return tokens
