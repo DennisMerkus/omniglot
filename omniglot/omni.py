@@ -179,7 +179,7 @@ class OmnilingualProcessor(DocumentProcessor):
             if nudged_language == language:
                 return nudged_language
 
-        return Language.where(code=LanguageCode.Undetermined)
+        return Language.where(tag=LanguageCode.Undetermined.value)
 
     @staticmethod
     def token_sticks_right(token):

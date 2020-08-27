@@ -38,6 +38,9 @@ class FrenchParser(NaturalLanguageProcessor):
         for token in self.nlp(text):
             print(token.text, token.lemma_, token.pos_, token.tag_)
 
+            if token.pos_ == "SPACE":
+                continue
+
             lemma: str
 
             if token.text.lower() in ["elle", "lui", "je", "la", "le"]:
