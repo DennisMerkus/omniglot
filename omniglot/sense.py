@@ -15,7 +15,7 @@ class SourceWord(BaseModel):
 
 
 class Sense(BaseModel):
-    definitions: Dict[str, List[str]]
+    definitions: Dict[LanguageCode, List[str]]
 
     tags: Set[str] = set()
 
@@ -27,3 +27,17 @@ class Sense(BaseModel):
     synonyms: List[str] = []
 
     source_language_words: List[SourceWord] = []
+
+    def to_bson(self):
+        return {
+            "definitions": {
+                language.value: definitions
+                for language, definitions in self.definitions.items()
+            },
+            "tags": list(self.tags),
+            "information": self.information,
+            "references": self.references,
+            "antonyms": self.antonyms,
+            "synonyms": self.synonyms,
+            "source_language_words": self.source_language_words,
+        }

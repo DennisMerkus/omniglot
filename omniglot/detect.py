@@ -4,14 +4,16 @@ from typing import Dict, Optional
 import pycld2
 
 from omnilingual import Language, LanguageCode
+from omnilingual.ietf.tag import IetfComponents
 
 
 def guess_language(text: str, language_hint: Optional[Language] = None) -> Language:
-
     if language_hint is not None and language_hint.code != LanguageCode.Undetermined:
-        # TODO: Have more sophisticated language selection 'with_region' instead of 'original'
         is_reliable, _, details = pycld2.detect(
-            text, hintLanguage=language_hint.alpha_2
+            text,
+            hintLanguage=language_hint.ietf_tag(
+                IetfComponents(script=True), alpha_3=False
+            ),
         )
     else:
         is_reliable, _, details = pycld2.detect(text, bestEffort=True)
