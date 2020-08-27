@@ -25,12 +25,11 @@ class FrenchNumberConverter(NumberConverter):
             return NumberToken(
                 text,
                 number,
-                FrenchNumberConverter.convert_number(number),
+                FrenchNumberConverter.verbalize_number(number),
                 NumType.Card,
                 language=LanguageCode.French,
             )
         else:
-            # Parse word as a number
             return WordToken(text, LanguageCode.French, pos=PartOfSpeech.Number)
 
     @staticmethod
